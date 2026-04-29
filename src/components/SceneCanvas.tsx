@@ -155,10 +155,12 @@ export default function SceneCanvas() {
     };
     window.addEventListener("resize", onResize);
 
-    const getProgress = () => {
+    const getRawProgress = () => {
       const max = document.body.scrollHeight - window.innerHeight;
       return max > 0 ? Math.min(window.scrollY / max, 1) : 0;
     };
+    let smoothProgress = getRawProgress();
+    const getProgress = () => smoothProgress;
 
     let curDim = -1;
     const updateDimension = () => {
@@ -198,6 +200,9 @@ export default function SceneCanvas() {
 
       tarX += (mxN - tarX) * 0.04;
       tarY += (myN - tarY) * 0.04;
+
+      const target = getRawProgress();
+      smoothProgress += (target - smoothProgress) * 0.08;
       const sp = getProgress();
 
       knots.forEach((k, i) => {

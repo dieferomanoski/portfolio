@@ -1,52 +1,29 @@
-"use client";
-
-import { useEffect } from "react";
-
-const STAGGER_IDS = [
-  "htag",
-  "hname",
-  "hrole",
-  "hchips",
-  "hbio",
-  "hcta",
-  "scrollhint",
-];
-
 export default function HeroSection() {
-  useEffect(() => {
-    const timers = STAGGER_IDS.map((id, i) =>
-      window.setTimeout(() => {
-        document.getElementById(id)?.classList.add("in");
-      }, 100 + i * 110)
-    );
-    return () => timers.forEach((t) => window.clearTimeout(t));
-  }, []);
-
   return (
     <section className="sec" id="hero">
-      <span className="hero-tag" id="htag">
+      <span className="hero-tag" data-reveal data-delay="1">
         ◎ Portfolio · 2026
       </span>
-      <h1 className="hero-name" id="hname">
+      <h1 className="hero-name" data-reveal data-delay="2">
         Dieferson
         <br />
         <span className="hero-name-grad">Romanoski</span>
       </h1>
-      <div className="hero-role" id="hrole">
+      <div className="hero-role" data-reveal data-delay="3">
         Full-Stack Software Engineer
       </div>
-      <div className="hero-chips" id="hchips">
+      <div className="hero-chips" data-reveal data-delay="4">
         <span className="chip">🌍 Worldwide</span>
         <span className="chip">🇧🇷 Brazil</span>
         <span className="chip">CS Bachelor</span>
         <span className="chip">Web3</span>
         <span className="chip">Cybersecurity</span>
       </div>
-      <p className="hero-bio" id="hbio">
+      <p className="hero-bio" data-reveal data-delay="5">
         Building scalable systems, secure applications, and innovative solutions
         across web, mobile, and blockchain.
       </p>
-      <div className="hero-cta" id="hcta">
+      <div className="hero-cta" data-reveal data-delay="6">
         <a href="#projects" className="btn-p">
           View Projects
         </a>
@@ -62,7 +39,7 @@ export default function HeroSection() {
           GitHub
         </a>
       </div>
-      <div className="scroll-hint" id="scrollhint">
+      <div className="scroll-hint" data-reveal data-delay="8">
         <div className="scroll-bar" />
         <span>Scroll to traverse dimensions</span>
       </div>
