@@ -23,6 +23,19 @@ const SKILL_CATEGORIES: { title: string; tags: string[] }[] = [
     title: "Architecture",
     tags: ["SOLID", "TDD", "Microservices", "DDD", "Event-Driven", "Serverless", "Monorepo", "Etc..."],
   },
+  {
+    title: "AI & Automation",
+    tags: [
+      "Agentic AI",
+      "LangChain",
+      "MCPs",
+      "RAG",
+      "Vector DBs",
+      "Embeddings",
+      "Prompt Engineering",
+      "Workflow Automation",
+    ],
+  },
 ];
 
 export default function SkillsSection() {

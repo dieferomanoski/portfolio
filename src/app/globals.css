@@ -176,7 +176,7 @@ nav.site-nav.stuck {
   max-width: 62%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: safe center;
 }
 .sec-divider {
   height: 1px;

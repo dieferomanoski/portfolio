@@ -5,6 +5,7 @@ import { useEffect } from "react";
 const COOLDOWN_MS = 750;
 const WHEEL_THRESHOLD = 1;
 const TOUCH_THRESHOLD = 40;
+const EDGE_TOLERANCE = 4;
 
 export default function SectionSnap() {
   useEffect(() => {
@@ -29,6 +30,23 @@ export default function SectionSnap() {
       return best;
     };
 
+    type EdgeState = {
+      isTall: boolean;
+      atTop: boolean;
+      atBottom: boolean;
+    };
+
+    const edgeState = (section: HTMLElement): EdgeState => {
+      const sectionTop = section.offsetTop;
+      const sectionBottom = sectionTop + section.offsetHeight;
+      const viewTop = window.scrollY;
+      const viewBottom = viewTop + window.innerHeight;
+      const isTall = section.offsetHeight > window.innerHeight + EDGE_TOLERANCE;
+      const atTop = viewTop <= sectionTop + EDGE_TOLERANCE;
+      const atBottom = viewBottom >= sectionBottom - EDGE_TOLERANCE;
+      return { isTall, atTop, atBottom };
+    };
+
     let locked = false;
     const goTo = (index: number) => {
       const sections = getSections();
@@ -42,13 +60,49 @@ export default function SectionSnap() {
       }, COOLDOWN_MS);
     };
 
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return;
-      e.preventDefault();
+    const handleDirection = (direction: 1 | -1) => {
       if (locked) return;
       const sections = getSections();
       const idx = currentIndex(sections);
-      goTo(idx + (e.deltaY > 0 ? 1 : -1));
+      const section = sections[idx];
+      if (!section) return;
+      const { isTall, atTop, atBottom } = edgeState(section);
+
+      if (isTall) {
+        if (direction === 1 && !atBottom) {
+          // free-scroll down inside the section
+          window.scrollBy({ top: window.innerHeight * 0.85, behavior: "smooth" });
+          return;
+        }
+        if (direction === -1 && !atTop) {
+          window.scrollBy({
+            top: -window.innerHeight * 0.85,
+            behavior: "smooth",
+          });
+          return;
+        }
+      }
+      goTo(idx + direction);
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return;
+      const sections = getSections();
+      const idx = currentIndex(sections);
+      const section = sections[idx];
+      if (section) {
+        const { isTall, atTop, atBottom } = edgeState(section);
+        const direction = e.deltaY > 0 ? 1 : -1;
+        // Inside a tall section away from the edge: let the native scroll happen.
+        if (
+          isTall &&
+          ((direction === 1 && !atBottom) || (direction === -1 && !atTop))
+        ) {
+          return;
+        }
+      }
+      e.preventDefault();
+      handleDirection(e.deltaY > 0 ? 1 : -1);
     };
 
     const onKey = (e: KeyboardEvent) => {
@@ -63,8 +117,7 @@ export default function SectionSnap() {
       const sections = getSections();
       if (isHome) return goTo(0);
       if (isEnd) return goTo(sections.length - 1);
-      const idx = currentIndex(sections);
-      goTo(idx + (isDown ? 1 : -1));
+      handleDirection(isDown ? 1 : -1);
     };
 
     let touchStartY = 0;
@@ -75,10 +128,7 @@ export default function SectionSnap() {
       const endY = e.changedTouches[0]?.clientY ?? 0;
       const delta = touchStartY - endY;
       if (Math.abs(delta) < TOUCH_THRESHOLD) return;
-      if (locked) return;
-      const sections = getSections();
-      const idx = currentIndex(sections);
-      goTo(idx + (delta > 0 ? 1 : -1));
+      handleDirection(delta > 0 ? 1 : -1);
     };
 
     const onAnchorClick = (e: MouseEvent) => {
