@@ -26,7 +26,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
 }
 
 body {
@@ -35,11 +34,6 @@ body {
   font-family: var(--font);
   overflow-x: hidden;
   cursor: none;
-}
-
-.sec {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 @media (pointer: coarse) {

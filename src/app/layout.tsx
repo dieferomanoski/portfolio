@@ -5,6 +5,8 @@ import SiteNav from "@/components/SiteNav";
 import SceneCanvas from "@/components/SceneCanvas";
 import PortalIntro from "@/components/PortalIntro";
 import RevealOnScroll from "@/components/RevealOnScroll";
+import SectionSnap from "@/components/SectionSnap";
+import ScrollToTopOnLoad from "@/components/ScrollToTopOnLoad";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -32,12 +34,14 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <ScrollToTopOnLoad />
         <SiteCursor />
         <SceneCanvas />
         <SiteNav />
         {children}
         <PortalIntro />
         <RevealOnScroll />
+        <SectionSnap />
       </body>
     </html>
   );
