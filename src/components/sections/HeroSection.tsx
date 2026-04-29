@@ -28,8 +28,8 @@ export default function HeroSection() {
           Brazil
         </span>
         <span className="chip">CS Bachelor</span>
-        <span className="chip">Web3</span>
-        <span className="chip">Cybersecurity</span>
+        <span className="chip">Web3 Enthusiast</span>
+        <span className="chip">Cybersecurity Enthusiast</span>
       </div>
       <p className="hero-bio" data-reveal data-delay="5">
         Building scalable systems, secure applications, and innovative solutions

@@ -1,7 +1,7 @@
 const SKILL_CATEGORIES: { title: string; tags: string[] }[] = [
   {
     title: "Languages",
-    tags: ["TypeScript", "JavaScript", "Python", "Dart", "Solidity", "Rust"],
+    tags: ["TypeScript", "JavaScript", "Python", "Dart", "Go", "Solidity (Enthusiast)", "Rust (Enthusiast)"],
   },
   {
     title: "Frontend",
@@ -12,7 +12,7 @@ const SKILL_CATEGORIES: { title: string; tags: string[] }[] = [
     tags: ["Node.js", "NestJS", "PostgreSQL", "SQL/NOSQL" ,  "Redis", "GraphQL", "ORMs", "REST"],
   },
   {
-    title: "Web3",
+    title: "Web3 (Enthusiast)",
     tags: ["Ethereum", "Solana", "ERC-20", "ERC-721", "ERC-1155", "NFT", "DeFi"],
   },
   {
