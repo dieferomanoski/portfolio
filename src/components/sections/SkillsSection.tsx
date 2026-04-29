@@ -1,42 +1,61 @@
-"use client";
-
-import GlowCard from "@/components/ui/GlowCard";
-
-const skills = {
-  Frontend: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-  Backend: ["Node.js", "Express", "REST APIs"],
-  Tools: ["Git", "GitHub", "Figma", "VS Code"],
-};
+const SKILL_CATEGORIES: { title: string; tags: string[] }[] = [
+  {
+    title: "Languages",
+    tags: ["TypeScript", "JavaScript", "Python", "Dart", "Solidity", "Rust"],
+  },
+  {
+    title: "Frontend",
+    tags: ["React", "Next.js", "Angular", "Tailwind", "Flutter", "React Native", "Ionic"],
+  },
+  {
+    title: "Backend",
+    tags: ["Node.js", "NestJS", "PostgreSQL", "SQL/NOSQL" ,  "Redis", "GraphQL", "ORMs", "REST"],
+  },
+  {
+    title: "Web3",
+    tags: ["Ethereum", "Solana", "ERC-20", "ERC-721", "ERC-1155", "NFT", "DeFi"],
+  },
+  {
+    title: "DevOps",
+    tags: ["Docker", "AWS", "Vercel", "CI/CD", "Linux", "GitHub Actions"],
+  },
+  {
+    title: "Architecture",
+    tags: ["SOLID", "TDD", "Microservices", "DDD", "Event-Driven", "Serverless", "Monorepo", "Etc..."],
+  },
+];
 
 export default function SkillsSection() {
   return (
-    <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-neon-cyan/80">
-        Skills
+    <section className="sec" id="skills">
+      <div className="dim-badge" data-reveal>
+        <div className="dim-dot" />
+        Dimension 02 · Technical Stack
+      </div>
+      <span className="s-label">Skills &amp; Expertise</span>
+      <h2 className="s-title">What I Use</h2>
+      <p className="s-sub">
+        Technologies I rely on to build great products.
       </p>
-      <h2 className="mt-2 text-2xl font-semibold text-slate-100">
-        What I work with
-      </h2>
-
-      <div className="mt-6 grid gap-6 md:grid-cols-3">
-        {Object.entries(skills).map(([group, items]) => (
-          <GlowCard key={group} className="p-5">
-            <h3 className="text-sm font-semibold text-slate-100">{group}</h3>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {items.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 text-[11px] text-slate-300"
-                >
-                  {item}
+      <div className="sk-grid">
+        {SKILL_CATEGORIES.map((cat, i) => (
+          <div
+            key={cat.title}
+            className="sk-cat"
+            data-reveal
+            data-delay={String(i + 1)}
+          >
+            <div className="sk-cat-title">{cat.title}</div>
+            <div className="sk-tags">
+              {cat.tags.map((t, ti) => (
+                <span key={`${t}-${ti}`} className="sk-tag">
+                  {t}
                 </span>
               ))}
             </div>
-          </GlowCard>
+          </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
-
-

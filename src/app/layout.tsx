@@ -1,13 +1,14 @@
-import NavbarMinimal from "@/components/NavbarMinimal";
-import ScrollBackgroundSwitcher from "@/components/ScrollBackgroundSwitcher";
-import ScrollIndicator from "@/components/ScrollIndicator";
-import NeonCursor from "@/components/NeonCursor";
-import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
+import { siteConfig } from "@/config/site";
+import SiteCursor from "@/components/SiteCursor";
+import SiteNav from "@/components/SiteNav";
+import SceneCanvas from "@/components/SceneCanvas";
+import PortalIntro from "@/components/PortalIntro";
+import RevealOnScroll from "@/components/RevealOnScroll";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name} – Portfolio`,
+  title: `${siteConfig.name} — Full-Stack Engineer`,
   description: `${siteConfig.role} portfolio.`,
 };
 
@@ -17,17 +18,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen bg-[#020617] text-slate-100 antialiased overflow-x-hidden">
-        {/* Liquid Ether background */}
-        <ScrollBackgroundSwitcher />
-        
-        <NeonCursor />
-        <ScrollIndicator />
-        <NavbarMinimal />
-        <main className="relative z-10 w-full">
-          {children}
-        </main>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>
+        <SiteCursor />
+        <SceneCanvas />
+        <SiteNav />
+        {children}
+        <PortalIntro />
+        <RevealOnScroll />
       </body>
     </html>
   );

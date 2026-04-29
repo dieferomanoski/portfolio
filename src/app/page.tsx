@@ -1,26 +1,18 @@
-import HeroMinimal from "@/components/sections/HeroMinimal";
-import ProjectsCollapsible from "@/components/sections/ProjectsCollapsible";
-import SkillsCollapsible from "@/components/sections/SkillsCollapsible";
-import ContactSectionMinimal from "@/components/sections/ContactSectionMinimal";
+import HeroSection from "@/components/sections/HeroSection";
+import ProjectsSection from "@/components/sections/ProjectsSection";
+import SkillsSection from "@/components/sections/SkillsSection";
+import ContactSection from "@/components/sections/ContactSection";
 
 export default function Home() {
   return (
     <>
-      <section id="hero">
-        <HeroMinimal />
-      </section>
-
-      <section id="projects">
-        <ProjectsCollapsible />
-      </section>
-
-      <section id="skills">
-        <SkillsCollapsible />
-      </section>
-
-      <section id="contact">
-        <ContactSectionMinimal />
-      </section>
+      <HeroSection />
+      <div className="sec-divider" />
+      <ProjectsSection />
+      <div className="sec-divider" />
+      <SkillsSection />
+      <div className="sec-divider" />
+      <ContactSection />
     </>
   );
 }
