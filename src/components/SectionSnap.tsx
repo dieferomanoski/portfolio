@@ -2,10 +2,15 @@
 
 import { useEffect } from "react";
 
-const COOLDOWN_MS = 750;
+const SNAP_DURATION_MS = 1100;
+const COOLDOWN_PAD_MS = 120;
 const WHEEL_THRESHOLD = 1;
 const TOUCH_THRESHOLD = 40;
 const EDGE_TOLERANCE = 4;
+
+function easeInOutCubic(t: number): number {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
 
 export default function SectionSnap() {
   useEffect(() => {
@@ -48,16 +53,42 @@ export default function SectionSnap() {
     };
 
     let locked = false;
+    let activeScrollRaf = 0;
+    let lockTimer = 0;
+
+    const easedScrollTo = (top: number, duration = SNAP_DURATION_MS) => {
+      if (activeScrollRaf) cancelAnimationFrame(activeScrollRaf);
+      if (lockTimer) window.clearTimeout(lockTimer);
+      const start = window.scrollY;
+      const distance = top - start;
+      if (Math.abs(distance) < 1) {
+        locked = false;
+        return;
+      }
+      const t0 = performance.now();
+      locked = true;
+      const step = (now: number) => {
+        const t = Math.min((now - t0) / duration, 1);
+        const eased = easeInOutCubic(t);
+        window.scrollTo(0, start + distance * eased);
+        if (t < 1) {
+          activeScrollRaf = requestAnimationFrame(step);
+        } else {
+          activeScrollRaf = 0;
+          lockTimer = window.setTimeout(() => {
+            locked = false;
+          }, COOLDOWN_PAD_MS);
+        }
+      };
+      activeScrollRaf = requestAnimationFrame(step);
+    };
+
     const goTo = (index: number) => {
       const sections = getSections();
       if (!sections.length) return;
       const clamped = Math.max(0, Math.min(sections.length - 1, index));
       const target = sections[clamped];
-      locked = true;
-      window.scrollTo({ top: target.offsetTop, behavior: "smooth" });
-      window.setTimeout(() => {
-        locked = false;
-      }, COOLDOWN_MS);
+      easedScrollTo(target.offsetTop);
     };
 
     const handleDirection = (direction: 1 | -1) => {
@@ -70,15 +101,11 @@ export default function SectionSnap() {
 
       if (isTall) {
         if (direction === 1 && !atBottom) {
-          // free-scroll down inside the section
-          window.scrollBy({ top: window.innerHeight * 0.85, behavior: "smooth" });
+          easedScrollTo(window.scrollY + window.innerHeight * 0.85, 700);
           return;
         }
         if (direction === -1 && !atTop) {
-          window.scrollBy({
-            top: -window.innerHeight * 0.85,
-            behavior: "smooth",
-          });
+          easedScrollTo(window.scrollY - window.innerHeight * 0.85, 700);
           return;
         }
       }
@@ -143,13 +170,7 @@ export default function SectionSnap() {
       const sections = getSections();
       const idx = sections.indexOf(el);
       if (idx >= 0) goTo(idx);
-      else {
-        locked = true;
-        window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
-        window.setTimeout(() => {
-          locked = false;
-        }, COOLDOWN_MS);
-      }
+      else easedScrollTo(el.offsetTop);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -164,6 +185,8 @@ export default function SectionSnap() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
       document.removeEventListener("click", onAnchorClick);
+      if (activeScrollRaf) cancelAnimationFrame(activeScrollRaf);
+      if (lockTimer) window.clearTimeout(lockTimer);
     };
   }, []);
 

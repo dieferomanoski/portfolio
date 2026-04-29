@@ -14,7 +14,19 @@ export default function HeroSection() {
       </div>
       <div className="hero-chips" data-reveal data-delay="4">
         <span className="chip">🌍 Worldwide</span>
-        <span className="chip">🇧🇷 Brazil</span>
+        <span className="chip">
+          <svg
+            className="chip-flag"
+            viewBox="0 0 14 10"
+            aria-label="Brazil"
+            role="img"
+          >
+            <rect width="14" height="10" fill="#009c3b" />
+            <polygon points="7,1 13,5 7,9 1,5" fill="#ffdf00" />
+            <circle cx="7" cy="5" r="2" fill="#002776" />
+          </svg>
+          Brazil
+        </span>
         <span className="chip">CS Bachelor</span>
         <span className="chip">Web3</span>
         <span className="chip">Cybersecurity</span>
