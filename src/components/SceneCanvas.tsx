@@ -162,6 +162,8 @@ export default function SceneCanvas() {
     let smoothProgress = getRawProgress();
     const getProgress = () => smoothProgress;
 
+    let smoothSpin = 0;
+
     let curDim = -1;
     const updateDimension = () => {
       const sp = getProgress();
@@ -205,8 +207,13 @@ export default function SceneCanvas() {
       smoothProgress += (target - smoothProgress) * 0.08;
       const sp = getProgress();
 
+      // Ease the scroll-driven spin-up so fast scrolling doesn't snap the
+      // tunnel to top speed instantly, and cap the multiplier well below
+      // the old 1x-4x swing so it never reads as "spinning too fast".
+      const targetSpin = Math.pow(sp, 1.4);
+      smoothSpin += (targetSpin - smoothSpin) * 0.03;
       knots.forEach((k, i) => {
-        const speedMul = 1 + sp * 2.5 + i * 0.15;
+        const speedMul = 1 + smoothSpin * 0.9 + i * 0.05;
         k.mesh.rotation.x = t * 0.4 * speedMul + tarY * 0.3;
         k.mesh.rotation.y = t * 0.55 * speedMul + tarX * 0.3;
         k.mesh.rotation.z = t * 0.18 * speedMul * (i % 2 ? 1 : -1);
